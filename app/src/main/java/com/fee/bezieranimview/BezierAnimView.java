@@ -10,11 +10,8 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.ColorInt;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +22,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import common.base.utils.CommonLog;
+import androidx.annotation.ColorInt;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 
 /**
  * ******************(^_^)***********************<br>
@@ -115,7 +116,8 @@ public class BezierAnimView extends FrameLayout {
     /**
      * 将要动画的资源
      */
-    private @DrawableRes int willAnimDrawableRes;
+    private @DrawableRes
+    int willAnimDrawableRes;
 
     public BezierAnimView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -379,10 +381,10 @@ public class BezierAnimView extends FrameLayout {
                 break;
             case 1:
 //                thePoint.x = random.nextInt(halfMineW);
-//                thePoint.y = random.nextInt(halfMineH) + halfMineH;
+                thePoint.y = random.nextInt(halfMineH) + halfMineH;
 
-                thePoint.x = halfMineW;
-                thePoint.y = halfMineH;
+//                thePoint.x = halfMineW;
+//                thePoint.y = halfMineH;
                 break;
             case 2:
 //                thePoint.x = random.nextInt(halfMineW) + halfMineW;
@@ -581,7 +583,7 @@ public class BezierAnimView extends FrameLayout {
                     theTargetChildView.setAlpha(1 - curAnimatedFraction);
                 }
             }
-            CommonLog.d(TAG, "--> onAnimationUpdate() curPointF = " + curPointF);
+            Log.d(TAG, "--> onAnimationUpdate() curPointF = " + curPointF);
             if (isNeedCallbackUpdateAnimState) {
                 onAnimStateChanged(theTargetChildView, curPointF, curAnimatedFraction);
             }

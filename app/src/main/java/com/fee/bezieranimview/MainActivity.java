@@ -6,17 +6,20 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
+import java.util.Random;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 public class MainActivity extends AppCompatActivity implements BezierAnimView.IBezierAnimControler{
     private BezierAnimView bezierAnimView;
+    private Random random = new Random();
     private int[] lovingHeartIconResIds = {
             R.drawable.loving_heart_72px,
             R.drawable.love_heart_2,
@@ -41,10 +44,20 @@ public class MainActivity extends AppCompatActivity implements BezierAnimView.IB
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                if (bezierAnimView != null) {
+                    bezierAnimView.play();
+                }
             }
         });
-        bezierAnimView = findViewById(R.id.bezier_anim_view);
 
+        //配置 BezierAnimView
+        bezierAnimView = findViewById(R.id.bezier_anim_view);
+        //让每个开始的动画不经过相同的轨迹
+        bezierAnimView.setAllAnimViewSamePath(false);
+        bezierAnimView.setAnimControler(this);
+        bezierAnimView.setNeedCallbackUpdateAnimState(false);
+        bezierAnimView.setWillAutoBuildAnimView(true);
+        bezierAnimView.setWillAnimDrawableRes(lovingHeartIconResIds[0]);
     }
 
     @Override
@@ -77,7 +90,11 @@ public class MainActivity extends AppCompatActivity implements BezierAnimView.IB
      */
     @Override
     public View provideHoldAnimView(BezierAnimView theBezierAnimView) {
-        return null;
+        ImageView ivAnimView = new ImageView(this);
+        int radomResIndex = random.nextInt(lovingHeartIconResIds.length);
+        int curAnimRes = lovingHeartIconResIds[radomResIndex];
+        ivAnimView.setImageResource(curAnimRes);
+        return ivAnimView;
     }
 
     /**
@@ -91,6 +108,9 @@ public class MainActivity extends AppCompatActivity implements BezierAnimView.IB
      */
     @Override
     public List<PointF> provideKeyPoints(BezierAnimView theBezierAnimView, int animIconWidth, int animIconHeight) {
+        //这里没有自己提供 贝塞尔曲线动画的轨迹关键点坐标集，而是使用 BezierAnimView内部默认的计算轨迹
+        //因此需要设置一下bezierAnimView.setWillAnimDrawableRes(lovingHeartIconResIds[0]);
+
         return null;
     }
 
